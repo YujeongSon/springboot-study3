@@ -6,7 +6,6 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class MemberDto {
     private String userId;
     private String userName;
