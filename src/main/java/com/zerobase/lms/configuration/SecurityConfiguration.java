@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -48,6 +49,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .loginPage("/member/login") // 로그인 페이지를 설정한다.
                 .failureHandler(getFailureHandler()) //로그인 실패 시 어떻게 처리할지 정한다.
                 .permitAll();
+
+        http.logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout")) // 해당 페이지로 가면 로그아웃 된다.
+                .logoutSuccessUrl("/") // 로그아웃 성공시 해당 페이지로 이동한다.
+                .invalidateHttpSession(true); // 세션을 모두 초기화한다.
 
         super.configure(http);
     }
