@@ -2,6 +2,13 @@
 Learning Management System(학습 관리 시스템)
 ---
 ### 개발 환경
+Java 8
+JDK 1.8.0
+IDE: IntelliJ
+Framework: Springboot(2.x)
+Database: MariaDB
+ORM: JPA
+
 
 ### 주요 기능
 1. 회원가입
