@@ -49,6 +49,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/member/reset/password")
                 .permitAll();
 
+        http.authorizeRequests()
+                .antMatchers("/admin/**")
+                .hasAuthority("ROLE_ADMIN");
+
         http.formLogin()
                 .loginPage("/member/login") // 로그인 페이지를 설정한다.
                 .failureHandler(getFailureHandler()) //로그인 실패 시 어떻게 처리할지 정한다.
@@ -58,6 +62,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout")) // 해당 페이지로 가면 로그아웃 된다.
                 .logoutSuccessUrl("/") // 로그아웃 성공시 해당 페이지로 이동한다.
                 .invalidateHttpSession(true); // 세션을 모두 초기화한다.
+
+        http.exceptionHandling()
+                .accessDeniedPage("/error/denied");
 
         super.configure(http);
     }

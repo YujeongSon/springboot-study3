@@ -23,7 +23,7 @@ public class MemberController {
     @GetMapping("/member/register")
     public String register() {
 
-        return "/member/register";
+        return "member/register";
     }
 
     @PostMapping("/member/register")
@@ -33,7 +33,7 @@ public class MemberController {
         boolean result = memberService.register(memberDto);
         model.addAttribute("result", result);
 
-        return "/member/register-complete";
+        return "member/register-complete";
     }
 
     @GetMapping("/member/email/auth")
@@ -45,21 +45,21 @@ public class MemberController {
         boolean result = memberService.emailAuth(uuid);
         model.addAttribute("result", result);
 
-        return "/member/email-auth";
+        return "member/email-auth";
     }
 
     // 로그인
     @RequestMapping("/member/login")
     public String login() {
 
-        return "/member/login";
+        return "member/login";
     }
 
     // 비밀번호 찾기
     @GetMapping("/member/find/password")
     public String findPassword() {
 
-        return "/member/find-password";
+        return "member/find-password";
     }
 
     @PostMapping("/member/find/password")
@@ -74,7 +74,7 @@ public class MemberController {
 
         model.addAttribute("result", result);
 
-        return "/member/find-password-result";
+        return "member/find-password-result";
     }
 
     @GetMapping("/member/reset/password")
@@ -85,7 +85,7 @@ public class MemberController {
         boolean result = memberService.checkResetPassword(uuid);
         model.addAttribute("result", result);
 
-        return "/member/reset-password";
+        return "member/reset-password";
     }
 
     @PostMapping("/member/reset/password")
@@ -99,14 +99,13 @@ public class MemberController {
 
         model.addAttribute("result", result);
 
-        return "/member/reset-password-result";
+        return "member/reset-password-result";
     }
 
     // 회원 정보
     @GetMapping("/member/info")
     public String memberInfo() {
 
-        return "/member/info";
+        return "member/info";
     }
-
 }

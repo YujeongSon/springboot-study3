@@ -75,6 +75,11 @@ public class MemberServiceImpl implements MemberService {
         }
 
         Member member = optionalMember.get();
+
+        if (member.isEmailAuthYn()) { // 이미 이메일 활성화가 되어있는 경우
+            return false;
+        }
+
         member.setEmailAuthYn(true);
         member.setEmailAuthDate(LocalDateTime.now());
         memberRepository.save(member);
@@ -132,7 +137,7 @@ public class MemberServiceImpl implements MemberService {
 
         String encPassword = BCrypt.hashpw(password, BCrypt.gensalt());
         member.setPassword(encPassword);
-        member.setResetPasswordKey("");
+        member.setResetPasswordKey(null);
         member.setResetPasswordLimitDate(null);
         memberRepository.save(member);
 
@@ -178,6 +183,10 @@ public class MemberServiceImpl implements MemberService {
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+        if (member.isAdminYn()) {
+            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
 
         return new User(member.getUserId(), member.getPassword(), grantedAuthorities);
     }
