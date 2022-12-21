@@ -12,7 +12,7 @@ Framework: Springboot(2.x)
 
 Database: MariaDB
 
-ORM: JPA
+ORM: MyBatis
 
 
 ### 주요 기능
