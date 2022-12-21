@@ -1,7 +1,7 @@
 package com.zerobase.lms.member.controller;
 
-import com.zerobase.lms.member.model.MemberDto;
-import com.zerobase.lms.member.model.ResetPasswordDto;
+import com.zerobase.lms.member.model.MemberInput;
+import com.zerobase.lms.member.model.ResetPasswordInput;
 import com.zerobase.lms.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -28,9 +28,9 @@ public class MemberController {
 
     @PostMapping("/member/register")
     public String registerSubmit(Model model, HttpServletRequest request,
-                                 HttpServletResponse response, MemberDto memberDto) {
+                                 HttpServletResponse response, MemberInput memberInput) {
 
-        boolean result = memberService.register(memberDto);
+        boolean result = memberService.register(memberInput);
         model.addAttribute("result", result);
 
         return "member/register-complete";
@@ -63,12 +63,12 @@ public class MemberController {
     }
 
     @PostMapping("/member/find/password")
-    public String findPasswordSubmit(Model model, ResetPasswordDto passwordDto) {
+    public String findPasswordSubmit(Model model, ResetPasswordInput passwordInput) {
 
         boolean result = false;
 
         try {
-            result = memberService.sendResetPassword(passwordDto);
+            result = memberService.sendResetPassword(passwordInput);
         } catch (Exception e) {
         }
 
@@ -89,11 +89,11 @@ public class MemberController {
     }
 
     @PostMapping("/member/reset/password")
-    public String resetPasswordSubmit(Model model, ResetPasswordDto passwordDto) {
+    public String resetPasswordSubmit(Model model, ResetPasswordInput passwordInput) {
 
         boolean result = false;
         try {
-            result = memberService.resetPassword(passwordDto.getId(), passwordDto.getPassword());
+            result = memberService.resetPassword(passwordInput.getId(), passwordInput.getPassword());
         } catch (Exception e) {
         }
 

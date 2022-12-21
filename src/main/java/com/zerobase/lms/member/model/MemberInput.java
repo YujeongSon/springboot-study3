@@ -1,18 +1,14 @@
 package com.zerobase.lms.member.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResetPasswordDto {
+public class MemberInput {
     private String userId;
     private String userName;
-
-    private String id;
     private String password;
+    private String phone;
 }

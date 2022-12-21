@@ -1,6 +1,6 @@
 package com.zerobase.lms.admin;
 
-import com.zerobase.lms.member.entity.Member;
+import com.zerobase.lms.admin.dto.MemberDto;
 import com.zerobase.lms.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ public class AdminMemberController {
     @GetMapping("/admin/member/list.do")
     public String list(Model model) {
 
-        List<Member> memberList = memberService.list();
+        List<MemberDto> memberList = memberService.list();
         model.addAttribute("list", memberList);
 
         return "admin/member/list";

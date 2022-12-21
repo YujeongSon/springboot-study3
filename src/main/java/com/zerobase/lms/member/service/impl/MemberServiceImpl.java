@@ -1,10 +1,12 @@
 package com.zerobase.lms.member.service.impl;
 
+import com.zerobase.lms.admin.dto.MemberDto;
+import com.zerobase.lms.admin.mapper.MemberMapper;
 import com.zerobase.lms.components.MailComponent;
 import com.zerobase.lms.member.entity.Member;
 import com.zerobase.lms.member.exception.MemberNotEmailAuthException;
-import com.zerobase.lms.member.model.MemberDto;
-import com.zerobase.lms.member.model.ResetPasswordDto;
+import com.zerobase.lms.member.model.MemberInput;
+import com.zerobase.lms.member.model.ResetPasswordInput;
 import com.zerobase.lms.member.repository.MemberRepository;
 import com.zerobase.lms.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -28,26 +30,27 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MailComponent mailComponent;
+    private final MemberMapper memberMapper;
 
     // 회원 가입
     @Override
-    public boolean register(MemberDto memberDto) {
+    public boolean register(MemberInput memberInput) {
 
-        Optional<Member> optionalMember = memberRepository.findById(memberDto.getUserId());
+        Optional<Member> optionalMember = memberRepository.findById(memberInput.getUserId());
         if (optionalMember.isPresent()) {
             // 이미 해당 userId 존재
             return false;
         }
 
-        String encPassword = BCrypt.hashpw(memberDto.getPassword(), BCrypt.gensalt()); // 비밀번호 암호화
+        String encPassword = BCrypt.hashpw(memberInput.getPassword(), BCrypt.gensalt()); // 비밀번호 암호화
 
         String uuid = UUID.randomUUID().toString();
 
         Member member = Member.builder()
-                .userId(memberDto.getUserId())
-                .userName(memberDto.getUserName())
+                .userId(memberInput.getUserId())
+                .userName(memberInput.getUserName())
                 .password(encPassword)
-                .phone(memberDto.getPhone())
+                .phone(memberInput.getPhone())
                 .regDate(LocalDateTime.now())
                 .emailAuthYn(false)
                 .emailAuthKey(uuid)
@@ -55,7 +58,7 @@ public class MemberServiceImpl implements MemberService {
 
         memberRepository.save(member);
 
-        String email = memberDto.getUserId();
+        String email = memberInput.getUserId();
         String subject = "lms 사이트 가입을 축하드립니다.";
         String text = "<p>lms 사이트 가입을 축하드립니다.</p>"+
                     "<p>아래 링크를 클릭하여 가입을 완료해주세요.</p>"+
@@ -88,10 +91,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean sendResetPassword(ResetPasswordDto passwordDto) {
+    public boolean sendResetPassword(ResetPasswordInput passwordInput) {
 
         Optional<Member> optionalMember = memberRepository.findByUserIdAndUserName(
-                passwordDto.getUserId(), passwordDto.getUserName());
+                passwordInput.getUserId(), passwordInput.getUserName());
 
         if (!optionalMember.isPresent()) {
             throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다.");
@@ -104,7 +107,7 @@ public class MemberServiceImpl implements MemberService {
         member.setResetPasswordLimitDate(LocalDateTime.now().plusDays(1));
         memberRepository.save(member);
 
-        String email = passwordDto.getUserId();
+        String email = passwordInput.getUserId();
         String subject = "[lms] 비밀번호 초기화 메일입니다.";
         String text = "<p>lms 비밀번호 초기화 메일입니다.</p>"+
                 "<p>아래 링크를 클릭하여 비밀번호를 초기화 해주세요.</p>"+
@@ -168,9 +171,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> list() {
+    public List<MemberDto> list() {
 
-        return memberRepository.findAll();
+        MemberDto memberDto = new MemberDto();
+        List<MemberDto> list = memberMapper.selectList(memberDto);
+
+        return list;
     }
 
     @Override
