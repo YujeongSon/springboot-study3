@@ -29,4 +29,7 @@ public interface MemberService extends UserDetailsService {
 
     // 회원 상세 정보(관리자용)
     MemberDto detail(String userId);
+
+    // 회원 상태 변경(관리자용)
+    boolean updateStatus(String userId, String userStatus);
 }

@@ -5,7 +5,9 @@ import com.zerobase.lms.admin.mapper.MemberMapper;
 import com.zerobase.lms.admin.model.MemberParam;
 import com.zerobase.lms.components.MailComponent;
 import com.zerobase.lms.member.entity.Member;
+import com.zerobase.lms.member.entity.MemberCode;
 import com.zerobase.lms.member.exception.MemberNotEmailAuthException;
+import com.zerobase.lms.member.exception.MemberStopUserException;
 import com.zerobase.lms.member.model.MemberInput;
 import com.zerobase.lms.member.model.ResetPasswordInput;
 import com.zerobase.lms.member.repository.MemberRepository;
@@ -56,6 +58,7 @@ public class MemberServiceImpl implements MemberService {
                 .regDate(LocalDateTime.now())
                 .emailAuthYn(false)
                 .emailAuthKey(uuid)
+                .userStatus(Member.MEMBER_STATUS_REQ)
                 .build();
 
         memberRepository.save(member);
@@ -85,6 +88,7 @@ public class MemberServiceImpl implements MemberService {
             return false;
         }
 
+        member.setUserStatus(MemberCode.MEMBER_STATUS_ING);
         member.setEmailAuthYn(true);
         member.setEmailAuthDate(LocalDateTime.now());
         memberRepository.save(member);
@@ -203,6 +207,21 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public boolean updateStatus(String userId, String userStatus) {
+
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+        if (!optionalMember.isPresent()) {
+            throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다.");
+        }
+
+        Member member = optionalMember.get();
+        member.setUserStatus(userStatus);
+        memberRepository.save(member);
+
+        return true;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Optional<Member> optionalMember = memberRepository.findById(username);
@@ -214,6 +233,10 @@ public class MemberServiceImpl implements MemberService {
 
         if (!member.isEmailAuthYn()) {
             throw new MemberNotEmailAuthException("이메일 활성화 이후에 로그인 해주세요.");
+        }
+
+        if (Member.MEMBER_STATUS_STOP.equals(member.getUserStatus())) {
+            throw new MemberStopUserException("정지된 회원입니다.");
         }
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
