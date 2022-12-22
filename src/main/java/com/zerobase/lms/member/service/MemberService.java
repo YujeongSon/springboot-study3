@@ -24,6 +24,9 @@ public interface MemberService extends UserDetailsService {
     // 입력받은 uuid가 유효한지 확인
     boolean checkResetPassword(String uuid);
 
-    // 회원 목록 -> 관리자만 사용 가능
+    // 회원 목록(관리자용)
     List<MemberDto> list(MemberParam memberParam);
+
+    // 회원 상세 정보(관리자용)
+    MemberDto detail(String userId);
 }
