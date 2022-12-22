@@ -22,4 +22,7 @@ public class MemberDto {
     LocalDateTime resetPasswordLimitDate;
 
     boolean adminYn;
+
+    long totalCount;
+    long seq;
 }
