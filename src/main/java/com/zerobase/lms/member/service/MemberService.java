@@ -32,4 +32,7 @@ public interface MemberService extends UserDetailsService {
 
     // 회원 상태 변경(관리자용)
     boolean updateStatus(String userId, String userStatus);
+
+    // 회원 비밀번호 초기화(관리자용)
+    boolean updatePassword(String userId, String password);
 }

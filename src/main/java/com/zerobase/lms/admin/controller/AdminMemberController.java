@@ -2,7 +2,7 @@ package com.zerobase.lms.admin.controller;
 
 import com.zerobase.lms.admin.dto.MemberDto;
 import com.zerobase.lms.admin.model.MemberParam;
-import com.zerobase.lms.admin.model.MemberStatusInput;
+import com.zerobase.lms.admin.model.MemberInput;
 import com.zerobase.lms.member.service.MemberService;
 import com.zerobase.lms.util.PageUtil;
 import lombok.RequiredArgsConstructor;
@@ -51,10 +51,19 @@ public class AdminMemberController {
     }
 
     @PostMapping("/admin/member/status.do")
-    public String status(Model model, MemberStatusInput statusInput) {
+    public String status(Model model, MemberInput memberInput) {
 
         boolean result = memberService.updateStatus(
-                statusInput.getUserId(), statusInput.getUserStatus());
+                memberInput.getUserId(), memberInput.getUserStatus());
+
+        return "redirect:/admin/member/detail.do?userId=" + memberInput.getUserId();
+    }
+
+    @PostMapping("/admin/member/password.do")
+    public String password(Model model, MemberInput statusInput) {
+
+        boolean result = memberService.updatePassword(
+                statusInput.getUserId(), statusInput.getPassword());
 
         return "redirect:/admin/member/detail.do?userId=" + statusInput.getUserId();
     }
