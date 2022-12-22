@@ -2,6 +2,7 @@ package com.zerobase.lms.member.service.impl;
 
 import com.zerobase.lms.admin.dto.MemberDto;
 import com.zerobase.lms.admin.mapper.MemberMapper;
+import com.zerobase.lms.admin.model.MemberParam;
 import com.zerobase.lms.components.MailComponent;
 import com.zerobase.lms.member.entity.Member;
 import com.zerobase.lms.member.exception.MemberNotEmailAuthException;
@@ -171,10 +172,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<MemberDto> list() {
+    public List<MemberDto> list(MemberParam memberParam) {
 
-        MemberDto memberDto = new MemberDto();
-        List<MemberDto> list = memberMapper.selectList(memberDto);
+        List<MemberDto> list = memberMapper.selectList(memberParam);
 
         return list;
     }
