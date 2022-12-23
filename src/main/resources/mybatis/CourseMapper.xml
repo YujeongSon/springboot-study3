@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.zerobase.lms.admin.mapper.MemberMapper">
+<mapper namespace="com.zerobase.lms.course.mapper.CourseMapper">
 
     <sql id="selectListWhere">
         <if test="searchType != null and searchValue != null">
@@ -31,19 +31,19 @@
     </sql>
 
     <select id="selectListCount"
-            parameterType="com.zerobase.lms.admin.model.MemberParam"
+            parameterType="com.zerobase.lms.course.model.CourseParam"
             resultType="long">
         select count(*)
-        from member
+        from course
         where 1 = 1
             <include refid="selectListWhere"></include>
     </select>
 
     <select id="selectList"
-            parameterType="com.zerobase.lms.admin.model.MemberParam"
-            resultType="com.zerobase.lms.admin.dto.MemberDto">
+            parameterType="com.zerobase.lms.course.model.CourseParam"
+            resultType="com.zerobase.lms.course.dto.CourseDto">
         select *
-        from member
+        from course
         where 1 = 1
             <include refid="selectListWhere"></include>
         limit #{startPage}, #{endPage}

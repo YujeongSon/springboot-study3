@@ -4,7 +4,6 @@ import com.zerobase.lms.admin.dto.MemberDto;
 import com.zerobase.lms.admin.model.MemberParam;
 import com.zerobase.lms.admin.model.MemberInput;
 import com.zerobase.lms.member.service.MemberService;
-import com.zerobase.lms.util.PageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +14,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
-public class AdminMemberController {
+public class AdminMemberController extends BaseController {
 
     private final MemberService memberService;
 
@@ -25,18 +24,20 @@ public class AdminMemberController {
         parameter.init();
 
         List<MemberDto> memberList = memberService.list(parameter);
-        model.addAttribute("list", memberList);
 
         long totalCount = 0;
-        String queryString = parameter.getQueryString();
 
         if (memberList != null && memberList.size() > 0) {
             totalCount = memberList.get(0).getTotalCount();
         }
-        model.addAttribute("totalCount", totalCount);
 
-        PageUtil pageUtil = new PageUtil(totalCount, parameter.getPageSize(), parameter.getPageIndex(), queryString);
-        model.addAttribute("pager", pageUtil.pager());
+        String queryString = parameter.getQueryString();
+        String pagerHtml = getPagerHtml(totalCount, parameter.getPageSize(),
+                    parameter.getPageIndex(), queryString);
+
+        model.addAttribute("list", memberList);
+        model.addAttribute("totalCount", totalCount);
+        model.addAttribute("pager", pagerHtml);
 
         return "admin/member/list";
     }
