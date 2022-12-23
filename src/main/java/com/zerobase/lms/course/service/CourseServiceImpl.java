@@ -103,4 +103,25 @@ public class CourseServiceImpl implements CourseService {
 
         return courseRepository.findById(id).map(CourseDto::of).orElse(null);
     }
+
+    @Override
+    public boolean delete(String idList) {
+
+        if (idList != null && idList.length() > 0) {
+            String[] ids = idList.split(",");
+            for (String x : ids) {
+                long id = 0L;
+                try {
+                    id = Long.parseLong(x);
+                } catch (Exception e) {
+                }
+
+                if (id > 0) {
+                    courseRepository.deleteById(id);
+                }
+            }
+        }
+
+        return true;
+    }
 }
