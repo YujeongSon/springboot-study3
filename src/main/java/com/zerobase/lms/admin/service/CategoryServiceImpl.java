@@ -2,22 +2,29 @@ package com.zerobase.lms.admin.service;
 
 import com.zerobase.lms.admin.dto.CategoryDto;
 import com.zerobase.lms.admin.entity.Category;
+import com.zerobase.lms.admin.model.CategoryInput;
 import com.zerobase.lms.admin.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private Sort getSortBySortValueDesc() {
+
+        return Sort.by(Sort.Direction.DESC, "sortValue");
+    }
 
     @Override
     public List<CategoryDto> list() {
 
-        List<Category> categoryList = categoryRepository.findAll();
+        List<Category> categoryList = categoryRepository.findAll(getSortBySortValueDesc());
 
         return CategoryDto.of(categoryList);
     }
@@ -39,12 +46,27 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public boolean update(CategoryDto parameter) {
-        return false;
+    public boolean update(CategoryInput parameter) {
+
+        Optional<Category> optionalCategory = categoryRepository.findById(parameter.getId());
+        if (!optionalCategory.isPresent()) {
+            return false;
+        }
+
+        Category category = optionalCategory.get();
+        category.setCategoryName(parameter.getCategoryName());
+        category.setSortValue(parameter.getSortValue());
+        category.setUsingYn(parameter.isUsingYn());
+        categoryRepository.save(category);
+
+        return true;
     }
 
     @Override
     public boolean delete(long id) {
-        return false;
+
+        categoryRepository.deleteById(id);
+
+        return true;
     }
 }
