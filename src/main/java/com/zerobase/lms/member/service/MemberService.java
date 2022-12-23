@@ -10,13 +10,13 @@ import java.util.List;
 
 public interface MemberService extends UserDetailsService {
 
-    boolean register(MemberInput memberInput);
+    boolean register(MemberInput parameter);
 
     // uuid에 해당하는 계정 활성화
     boolean emailAuth(String uuid);
 
     // 입력한 이메일로 비밀번호 초기화 정보 전송
-    boolean sendResetPassword(ResetPasswordInput passwordInput);
+    boolean sendResetPassword(ResetPasswordInput parameter);
 
     // 입력받은 uuid로 비밀번호 초기화
     boolean resetPassword(String uuid, String password);
@@ -25,7 +25,7 @@ public interface MemberService extends UserDetailsService {
     boolean checkResetPassword(String uuid);
 
     // 회원 목록(관리자용)
-    List<MemberDto> list(MemberParam memberParam);
+    List<MemberDto> list(MemberParam parameter);
 
     // 회원 상세 정보(관리자용)
     MemberDto detail(String userId);

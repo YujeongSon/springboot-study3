@@ -38,23 +38,23 @@ public class MemberServiceImpl implements MemberService {
 
     // 회원 가입
     @Override
-    public boolean register(MemberInput memberInput) {
+    public boolean register(MemberInput parameter) {
 
-        Optional<Member> optionalMember = memberRepository.findById(memberInput.getUserId());
+        Optional<Member> optionalMember = memberRepository.findById(parameter.getUserId());
         if (optionalMember.isPresent()) {
             // 이미 해당 userId 존재
             return false;
         }
 
-        String encPassword = BCrypt.hashpw(memberInput.getPassword(), BCrypt.gensalt()); // 비밀번호 암호화
+        String encPassword = BCrypt.hashpw(parameter.getPassword(), BCrypt.gensalt()); // 비밀번호 암호화
 
         String uuid = UUID.randomUUID().toString();
 
         Member member = Member.builder()
-                .userId(memberInput.getUserId())
-                .userName(memberInput.getUserName())
+                .userId(parameter.getUserId())
+                .userName(parameter.getUserName())
                 .password(encPassword)
-                .phone(memberInput.getPhone())
+                .phone(parameter.getPhone())
                 .regDate(LocalDateTime.now())
                 .emailAuthYn(false)
                 .emailAuthKey(uuid)
@@ -63,7 +63,7 @@ public class MemberServiceImpl implements MemberService {
 
         memberRepository.save(member);
 
-        String email = memberInput.getUserId();
+        String email = parameter.getUserId();
         String subject = "lms 사이트 가입을 축하드립니다.";
         String text = "<p>lms 사이트 가입을 축하드립니다.</p>"+
                     "<p>아래 링크를 클릭하여 가입을 완료해주세요.</p>"+
@@ -97,10 +97,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean sendResetPassword(ResetPasswordInput passwordInput) {
+    public boolean sendResetPassword(ResetPasswordInput parameter) {
 
         Optional<Member> optionalMember = memberRepository.findByUserIdAndUserName(
-                passwordInput.getUserId(), passwordInput.getUserName());
+                parameter.getUserId(), parameter.getUserName());
 
         if (!optionalMember.isPresent()) {
             throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다.");
@@ -113,7 +113,7 @@ public class MemberServiceImpl implements MemberService {
         member.setResetPasswordLimitDate(LocalDateTime.now().plusDays(1));
         memberRepository.save(member);
 
-        String email = passwordInput.getUserId();
+        String email = parameter.getUserId();
         String subject = "[lms] 비밀번호 초기화 메일입니다.";
         String text = "<p>lms 비밀번호 초기화 메일입니다.</p>"+
                 "<p>아래 링크를 클릭하여 비밀번호를 초기화 해주세요.</p>"+
@@ -177,15 +177,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<MemberDto> list(MemberParam memberParam) {
+    public List<MemberDto> list(MemberParam parameter) {
 
-        long totalCount = memberMapper.selectListCount(memberParam);
-        List<MemberDto> list = memberMapper.selectList(memberParam);
+        long totalCount = memberMapper.selectListCount(parameter);
+        List<MemberDto> list = memberMapper.selectList(parameter);
         if (!CollectionUtils.isEmpty(list)) {
             int i = 0;
             for(MemberDto member : list) {
                 member.setTotalCount(totalCount);
-                member.setSeq(totalCount - memberParam.getStartPage() - i);
+                member.setSeq(totalCount - parameter.getStartPage() - i);
                 i++;
             }
         }

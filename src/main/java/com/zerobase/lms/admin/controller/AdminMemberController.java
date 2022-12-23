@@ -20,51 +20,51 @@ public class AdminMemberController {
     private final MemberService memberService;
 
     @GetMapping("/admin/member/list.do")
-    public String list(Model model, MemberParam memberParam) {
+    public String list(Model model, MemberParam parameter) {
 
-        memberParam.init();
+        parameter.init();
 
-        List<MemberDto> memberList = memberService.list(memberParam);
+        List<MemberDto> memberList = memberService.list(parameter);
         model.addAttribute("list", memberList);
 
         long totalCount = 0;
-        String queryString = memberParam.getQueryString();
+        String queryString = parameter.getQueryString();
 
         if (memberList != null && memberList.size() > 0) {
             totalCount = memberList.get(0).getTotalCount();
         }
         model.addAttribute("totalCount", totalCount);
 
-        PageUtil pageUtil = new PageUtil(totalCount, memberParam.getPageSize(), memberParam.getPageIndex(), queryString);
+        PageUtil pageUtil = new PageUtil(totalCount, parameter.getPageSize(), parameter.getPageIndex(), queryString);
         model.addAttribute("pager", pageUtil.pager());
 
         return "admin/member/list";
     }
 
     @GetMapping("/admin/member/detail.do")
-    public String detail(Model model, MemberParam memberParam) {
+    public String detail(Model model, MemberParam parameter) {
 
-        MemberDto memberDto = memberService.detail(memberParam.getUserId());
+        MemberDto memberDto = memberService.detail(parameter.getUserId());
         model.addAttribute("memberDto", memberDto);
 
         return "admin/member/detail";
     }
 
     @PostMapping("/admin/member/status.do")
-    public String status(Model model, MemberInput memberInput) {
+    public String status(Model model, MemberInput parameter) {
 
         boolean result = memberService.updateStatus(
-                memberInput.getUserId(), memberInput.getUserStatus());
+                parameter.getUserId(), parameter.getUserStatus());
 
-        return "redirect:/admin/member/detail.do?userId=" + memberInput.getUserId();
+        return "redirect:/admin/member/detail.do?userId=" + parameter.getUserId();
     }
 
     @PostMapping("/admin/member/password.do")
-    public String password(Model model, MemberInput statusInput) {
+    public String password(Model model, MemberInput parameter) {
 
         boolean result = memberService.updatePassword(
-                statusInput.getUserId(), statusInput.getPassword());
+                parameter.getUserId(), parameter.getPassword());
 
-        return "redirect:/admin/member/detail.do?userId=" + statusInput.getUserId();
+        return "redirect:/admin/member/detail.do?userId=" + parameter.getUserId();
     }
 }
