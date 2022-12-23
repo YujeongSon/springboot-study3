@@ -3,6 +3,7 @@ package com.zerobase.lms.course.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -17,6 +18,8 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    long categoryId;
+
     String imagePath;
     String keyword;
     String subject;
@@ -29,7 +32,7 @@ public class Course {
 
     long price;
     long salePrice;
-    LocalDateTime saleEndDate;
+    LocalDate saleEndDate;
     LocalDateTime regDate; // 등록일
     LocalDateTime udtDate; // 수정일
 }
