@@ -136,4 +136,11 @@ public class CourseServiceImpl implements CourseService {
         Optional<List<Course>> optionalList = courseRepository.findByCategoryId(parameter.getCategoryId());
         return optionalList.map(CourseDto::of).orElse(null);
     }
+
+    @Override
+    public CourseDto frontDetail(long id) {
+
+        Optional<Course> optionalCourse = courseRepository.findById(id);
+        return optionalCourse.map(CourseDto::of).orElse(null);
+    }
 }
