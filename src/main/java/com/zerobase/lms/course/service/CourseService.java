@@ -8,18 +8,21 @@ import java.util.List;
 
 public interface CourseService {
 
-    // 강좌 등록
+    // 강좌 등록(관리자용)
     boolean add(CourseInput parameter);
 
-    // 강좌 정보 수정
+    // 강좌 정보 수정(관리자용)
     boolean set(CourseInput parameter);
 
-    // 강좌 목록
+    // 강좌 목록(관리자용)
     List<CourseDto> list(CourseParam parameter);
 
-    // 강좌 상세 정보
+    // 강좌 상세 정보(관리자용)
     CourseDto getById(long id);
 
-    // 강좌 삭제
+    // 강좌 삭제(관리자용)
     boolean delete(String idList);
+
+    // 프론트 강좌 목록
+    List<CourseDto> frontList(CourseParam parameter);
 }

@@ -5,11 +5,14 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Builder
 public class CourseDto {
 
@@ -45,5 +48,18 @@ public class CourseDto {
                 .regDate(course.getRegDate())
                 .udtDate(course.getUdtDate())
                 .build();
+    }
+
+    public static List<CourseDto> of(List<Course> courseList) {
+
+        if (courseList == null) {
+            return null;
+        }
+
+        List<CourseDto> courseDtoList = new ArrayList<>();
+        for (Course x : courseList) {
+            courseDtoList.add(CourseDto.of(x));
+        }
+        return courseDtoList;
     }
 }
