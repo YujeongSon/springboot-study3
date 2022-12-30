@@ -1,18 +1,11 @@
 # Learning Management System
 ### 개발 환경
-Java 8
-
-JDK 1.8.0
-
-IDE: IntelliJ
-
-Framework: Springboot(2.x)
-
-Database: MariaDB
-
-ORM: MyBatis
-
-
+- Java 8
+- JDK 1.8.0
+- IDE: IntelliJ
+- Framework: Springboot(2.x)
+- Database: MariaDB
+- ORM: MyBatis
 ### 주요 기능
 - 회원가입
   - 가입 인증 메일 전송
